@@ -788,4 +788,82 @@
     :NOTER_PAGE: (60 . 0.03333333333333333)
     :END:
 
+**** DONE Exercise 1.29
+     :PROPERTIES:
+     :NOTER_PAGE: (63 . 0.21666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme
+					       ; Identity
+       (define (identity x) x)
+
+					       ; Increment
+       (define (inc x) (+ x 1))
+
+					       ; Sum (Recursive Process)
+       (define (sum_r a b term next)
+	 (if (> a b) 0
+	     (+ (term a) (sum_r (next a) b term next))))
+
+					       ; Sum (Iterative Process)     
+       (define (sum_i a b term next acc)
+	 (if (> a b) acc
+	     (sum_i (next a) b term next (+ (term a) acc))))
+       (define (sum a b term next)  (sum_i a b term next 0))
+
+					       ; Even
+       (define (even? num) (if (= (remainder num 2) 0) #t #f))
+
+					       ; Simpson's Rule Integral
+       (define (simp_rule_integral f a b n)
+	 (define h (/ (- b a) n))
+	 (define (y_k k) (f (+ a (* k h))))
+	 (define (new_term k)
+	   (cond ((or (= k 0) (= k n)) (y_k k))
+		 ((even? k) (* 2 (y_k k)))
+		 (else (* 4 (y_k k)))
+		 )	    )
+	 (* (/ h 3) (sum 0 n new_term inc))
+	 )
+
+					       ; Test by integrating the cube function from 0 to 1
+       (define (cube x) (* x x x))
+       (simp_rule_integral cube 0 1 10)
+     #+END_SRC
+
+**** DONE Exercise 1.30
+     :PROPERTIES:
+     :NOTER_PAGE: (63 . 0.4666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme
+					       ; Identity
+       (define (identity x) x)
+
+					       ; Increment
+       (define (inc x) (+ x 1))
+					       ; Iterative Solution
+       (define (sum term a next b)
+	 (define (iter a result)
+	   (if (> a b)
+	       result
+	       (iter (next a) (+ (term a) result))))
+	 (iter a 0))
+       (sum identity 0 inc 10)
+     #+END_SRC
+
+**** TODO Exercise 1.31
+     :PROPERTIES:
+     :NOTER_PAGE: (63 . 0.6666666666666666)
+     :END:
+
+**** TODO Exercise 1.32
+     :PROPERTIES:
+     :NOTER_PAGE: (64 . 0.016666666666666666)
+     :END:
+
+**** TODO Exercise 1.33
+     :PROPERTIES:
+     :NOTER_PAGE: (64 . 0.31666666666666665)
+     :END:
 
