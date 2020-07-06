@@ -763,15 +763,210 @@
      :NOTER_PAGE: (56 . 0.5)
      :END:
 
-**** TODO Exercise 1.25
+**** DONE Exercise 1.25
      :PROPERTIES:
      :NOTER_PAGE: (56 . 0.6)
      :END:
 
-**** TODO Exercise 1.26
+     #+BEGIN_SRC scheme :results output
+       (define (square x)
+	 (display "square:")
+	 (display x)
+	 (newline)
+	 (* x x)
+	 )
+       (define (even? x) (if (= 0 (remainder x 2)) #t #f))
+       (define (fast-expt b n)
+	 (cond ((= n 0) 1)
+	       ((even? n) (square (fast-expt b (/ n 2))))
+	       (else (* b (fast-expt b (- n 1))))))
+
+
+       (define (expmod base exp m)
+	 (display "base:")
+	 (display base)
+	 (display " ")
+	 (display "exp:")
+	 (display exp)
+	 (display " ")
+	 (display "m:")
+	 (display m)
+	 (newline)
+	 (cond ((= exp 0) 1)
+	       ((even? exp)
+		(remainder (square (expmod base (/ exp 2) m))
+			   m))
+	       (else
+		(remainder (* base (expmod base (- exp 1) m))
+			   m))))
+
+       (define (expmod2 base exp m)
+	 (display "base:")
+	 (display base)
+	 (display " ")
+	 (display "exp:")
+	 (display exp)
+	 (display " ")
+	 (display "m:")
+	 (display m)
+	 (newline)
+	 (remainder (fast-expt base exp) m))
+
+
+       (expmod 5 101 101)
+       (display "---------")
+       (newline)
+       (expmod2 5 101 101)
+     #+END_SRC
+
+     #+RESULTS:
+     #+begin_example
+     base:5 exp:101 m:101
+     base:5 exp:100 m:101
+     base:5 exp:50 m:101
+     base:5 exp:25 m:101
+     base:5 exp:24 m:101
+     base:5 exp:12 m:101
+     base:5 exp:6 m:101
+     base:5 exp:3 m:101
+     base:5 exp:2 m:101
+     base:5 exp:1 m:101
+     base:5 exp:0 m:101
+     square:5
+     square:24
+     square:71
+     square:92
+     square:1
+     square:1
+     ---------
+     base:5 exp:101 m:101
+     square:5
+     square:125
+     square:15625
+     square:244140625
+     square:298023223876953125
+     square:88817841970012523233890533447265625
+     #+end_example
+
+     As we can see by the printed output the original expmod function contains a modulo(remainder) operation within
+     it that makes sure that the numbers being squared do not become higher than the number m being tested. On the
+     other hand the second expmod implementation squares numbers that can be very long due to it only applying the
+     modulo(remainder) operation once at the end and arithmetic with arbitrarily long numbers is expensive.
+
+**** DONE Exercise 1.26
      :PROPERTIES:
      :NOTER_PAGE: (56 . 0.7666666666666667)
      :END:
+
+     Original
+     #+BEGIN_SRC scheme :results output
+       (define (square x)
+	 (display "square:")
+	 (display x)
+	 (newline)
+	 (* x x)
+	 )
+       (define (even? x) (if (= 0 (remainder x 2)) #t #f))
+
+       (define (expmod base exp m)
+	 (display "base:")
+	 (display base)
+	 (display " ")
+	 (display "exp:")
+	 (display exp)
+	 (display " ")
+	 (display "m:")
+	 (display m)
+	 (newline)
+	 (display "-----")
+	 (newline)
+	 (cond ((= exp 0) 1)
+	       ((even? exp)
+		(remainder (square (expmod base (/ exp 2) m))
+			   m))
+	       (else
+		(remainder (* base (expmod base (- exp 1) m))
+			   m))))
+
+       (expmod 2 4 3)
+     #+END_SRC
+
+     #+RESULTS:
+     #+begin_example
+     base:2 exp:4 m:3
+     -----
+     base:2 exp:2 m:3
+     -----
+     base:2 exp:1 m:3
+     -----
+     base:2 exp:0 m:3
+     -----
+     square:2
+     square:1
+     #+end_example
+
+     Modified
+     #+BEGIN_SRC scheme :results output
+       (define (square x)
+	 (display "square:")
+	 (display x)
+	 (newline)
+	 (* x x)
+	 )
+       (define (even? x) (if (= 0 (remainder x 2)) #t #f))
+
+       (define (expmod base exp m)
+	 (display "base:")
+	 (display base)
+	 (display " ")
+	 (display "exp:")
+	 (display exp)
+	 (display " ")
+	 (display "m:")
+	 (display m)
+	 (newline)
+	 (display "-----")
+	 (newline)
+	 (cond ((= exp 0) 1)
+	       ((even? exp)
+		(remainder (* (expmod base (/ exp 2) m)
+			      (expmod base (/ exp 2) m))
+			   m))
+	       (else
+		(remainder (* base (expmod base (- exp 1) m))
+			   m))))
+
+       (expmod 2 4 3)
+     #+END_SRC
+
+     #+RESULTS:
+     #+begin_example
+     base:2 exp:4 m:3
+     -----
+     base:2 exp:2 m:3
+     -----
+     base:2 exp:1 m:3
+     -----
+     base:2 exp:0 m:3
+     -----
+     base:2 exp:1 m:3
+     -----
+     base:2 exp:0 m:3
+     -----
+     base:2 exp:2 m:3
+     -----
+     base:2 exp:1 m:3
+     -----
+     base:2 exp:0 m:3
+     -----
+     base:2 exp:1 m:3
+     -----
+     base:2 exp:0 m:3
+     -----
+     #+end_example
+
+     As you can see by running both and looking at the printed output, the procedure that uses the product directly
+     creates a recursive tree process that results in a lot of redundant computations.
 
 **** TODO Exercise 1.27
      :PROPERTIES:
@@ -787,7 +982,7 @@
     :PROPERTIES:
     :NOTER_PAGE: (60 . 0.03333333333333333)
     :END:
-
+ 
 **** DONE Exercise 1.29
      :PROPERTIES:
      :NOTER_PAGE: (63 . 0.21666666666666667)
@@ -852,18 +1047,131 @@
        (sum identity 0 inc 10)
      #+END_SRC
 
-**** TODO Exercise 1.31
+**** DONE Exercise 1.31
      :PROPERTIES:
      :NOTER_PAGE: (63 . 0.6666666666666666)
      :END:
 
-**** TODO Exercise 1.32
+     #+BEGIN_SRC scheme
+					       ; Identity
+       (define (identity x) x)
+
+					       ; Increment
+       (define (inc x) (+ x 1))
+					       ; Iterative Solution
+       (define (product a b term next)
+	 (define (iter a result)
+	   (if (> a b)
+	       result
+	       (iter (next a) (* (term a) result))))
+	 (iter a 1))
+					       ; Recursive Solution
+       (define (product_r a b term next)
+	 (if (> a b) 1
+	     (* (term a) (product_r (next a) b term next))))
+
+       (product_r 1 5 identity inc)
+     #+END_SRC
+
+**** DONE Exercise 1.32
      :PROPERTIES:
      :NOTER_PAGE: (64 . 0.016666666666666666)
      :END:
 
-**** TODO Exercise 1.33
+     #+BEGIN_SRC scheme :results output
+					       ; Identity
+       (define (identity x) x)
+
+					       ; Increment
+       (define (inc x) (+ x 1))
+					       ; Recursive Solution
+       (define (acc_r a b base combiner term next)
+	 (if (> a b) base
+	     (combiner (term a) (acc_r (next a) b base combiner term next))))
+					       ; Iterative Solution
+       (define (acc a b base combiner term next)
+	 (define (iter a result)
+	   (if (> a b)
+	       result
+	       (iter (next a) (combiner (term a) result))))
+	 (iter a base))
+
+       (define (sum a b term next)  (acc a b 0 + term next))
+       (define (sum_r a b term next)  (acc_r a b 0 + term next))
+       (define (product a b term next)  (acc a b 1 * term next))
+       (define (product_r a b term next)  (acc_r a b 1 * term next))
+
+       (display "sum1_10i: ")(display (sum 1 10 identity inc))(newline)
+       (display "sum1_10r: ")(display (sum_r 1 10 identity inc))(newline)
+       (display "product1_5i: ")(display (product 1 5 identity inc))(newline)
+       (display "product1_5r: ")(display (product_r 1 5 identity inc))(newline)
+     #+END_SRC
+
+     #+RESULTS:
+     : sum1_10i: 55
+     : sum1_10r: 55
+     : product1_5i: 120
+     : product1_5r: 120
+
+**** DONE Exercise 1.33
      :PROPERTIES:
      :NOTER_PAGE: (64 . 0.31666666666666665)
      :END:
+
+     #+BEGIN_SRC scheme :results output
+					       ; Identity
+       (define (identity x) x)
+
+					       ; Increment
+       (define (inc x) (+ x 1))
+
+					       ; Iterative Solution
+       (define (acc_filtered a b base combiner filter term next)
+	 (define (iter a result)
+	   (if (> a b)
+	       result
+	       (iter (next a)
+		     (if (filter a)
+			 (combiner (term a) result)
+			 result))))
+	 (iter a base))
+
+					       ; Square
+       (define (square x) (* x x))
+
+					       ; Even?
+       (define (even? num) (if (= (remainder num 2) 0) #t #f))
+
+					       ; Prime?
+       (define (smallest-div n) 
+	 (define (divides? a b) 
+	   (= 0 (remainder b a))) 
+	 (define (find-div n test) 
+	   (cond ((> (square test) n) n) ((divides? test n) test) 
+		 (else (find-div n (+ test 1))))) 
+	 (find-div n 2)) 
+
+       (define (prime? n) 
+	 (if (= n 1) false (= n (smallest-div n))))
+					       ; GCD1?
+ (define (gcd m n) 
+   (cond ((< m n) (gcd n m)) 
+         ((= n 0) m) 
+         (else (gcd n (remainder m n))))) 
+  
+ (define (relative-prime? m n) 
+ (= (gcd m n) 1)) 
+  
+ (define (product_of_relative_primes n) 
+   (define (filter x) 
+     (relative-prime? x n)) 
+ (acc_filtered 1 n 1 * filter identity inc))
+
+       (define (sum_f a b filter term next)  (acc_filtered a b 0 + filter term next))
+       (define (product_f a b filter term next)  (acc_filtered a b 1 * filter term next))
+
+       (display "sum_of_primes_between_1_10: ")(display (sum_f 1 10 prime? identity inc))(newline)
+       (display "product_of_relative_primes_1_10: ")(display (product_of_relative_primes 10))(newline)
+
+     #+END_SRC
 
