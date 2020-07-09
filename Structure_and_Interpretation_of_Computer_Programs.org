@@ -1319,13 +1319,107 @@
        (display "tan(pi/4) = 1")
      #+END_SRC
 
-**** TODO Exercise 1.40
+**** DONE Exercise 1.40
      :PROPERTIES:
      :NOTER_PAGE: (76 . 0.3333333333333333)
      :END:
 
      #+BEGIN_SRC scheme :results output
-					       ; Average-dampening 
+					       ; Cubic function
+					       ; x^3 + ax^2 + bx + c
+       (define (cubic a b c)
+	 (lambda (x)
+	   (+ (* x  x  x)
+	      (* a x x)
+	      (* b x)
+	      c)))
+     #+END_SRC
+
+**** DONE Exercise 1.41
+     :PROPERTIES:
+     :NOTER_PAGE: (76 . 0.45)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+
+       (define (double f)
+	 (lambda (x) (f(f x))))
+
+       (define (inc x) (+ x 1))
+       (define (square x) (* x x))
+
+       (display "inc(inc(0)) = ")
+       (display ((double inc) 0))
+       (newline)
+       (display "square(square(2)) = ")
+       (display ((double square) 2))
+       (newline)
+       (display "(((double (double double)) inc) 5) = ")
+       (display (((double (double double)) inc) 5))
+     #+END_SRC
+
+**** DONE Exercise 1.42
+     :PROPERTIES:
+     :NOTER_PAGE: (76 . 0.5833333333333334)
+     :END:
+     
+     #+BEGIN_SRC scheme :results output
+       (define (inc x) (+ x 1))
+       (define (square x) (* x x))     
+
+       (define (compose f g)
+	 (lambda (x) (f (g x))))
+
+       (display "((compose square inc) 6) = ")
+       (display ((compose square inc) 6))
+     #+END_SRC
+
+**** DONE Exercise 1.43
+     :PROPERTIES:
+     :NOTER_PAGE: (76 . 0.7166666666666667)
+     :END:
+     
+     #+BEGIN_SRC scheme :results output
+       (define (square x) (* x x))
+       (define (compose f g)
+	 (lambda (x) (f (g x))))
+
+       (define (repeated f n)
+	 (if (<= n 1) f (repeated (compose f f) (- n 1))))
+
+       (display "((repeated square 2) 5) = ")
+       (display ((repeated square 2) 5))
+     #+END_SRC
+
+**** DONE Exercise 1.44
+     :PROPERTIES:
+     :NOTER_PAGE: (77 . 0.06666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme
+       (define (compose f g)
+	 (lambda (x) (f (g x))))
+
+       (define (repeated f n)
+	 (if (<= n 1) f (repeated (compose f f) (- n 1))))
+
+					       ; smooth = f(x - dx) + f(x) + f(x + dx)
+					       ; n-fold smoothed function
+       (define dx 0.00001)
+       (define (smooth f)
+	 (lambda (x) (/ (+ (f x) (f (+ x dx)) (f (- x dx)) 3))))
+
+       (define (smooth_n f n)
+	 ((repeated smooth n) f ))
+     #+END_SRC
+
+**** TODO Exercise 1.45
+     :PROPERTIES:
+     :NOTER_PAGE: (77 . 0.23333333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme
+     					       ; Average-dampening 
        (define (average a b) (/ (+ a b) 2))
        (define (average-damp f)
 	 (lambda (x) (average x (f x))))
@@ -1355,7 +1449,25 @@
 	   (- x (/ (g x) ((deriv g) x)))))
        (define (newtons-method g guess)
 	 (fixed-point (newton-transform g) guess))
-
-					       ; Cubic function
-
      #+END_SRC
+
+**** TODO Exercise 1.46
+     :PROPERTIES:
+     :NOTER_PAGE: (77 . 0.45)
+     :END:
+
+     #+BEGIN_SRC scheme
+     
+     #+END_SRC
+
+
+** Chapter 2: Building Abstractions with Data
+   :PROPERTIES:
+   :NOTER_PAGE: (79 . 0.1)
+   :END:
+
+*** 2.1 Introduction to Data Abstraction
+    :PROPERTIES:
+    :NOTER_PAGE: (82 . 0.4166666666666667)
+    :END:
+
