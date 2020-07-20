@@ -1471,3 +1471,186 @@
     :NOTER_PAGE: (82 . 0.4166666666666667)
     :END:
 
+**** DONE Exercise 2.1
+     :PROPERTIES:
+     :NOTER_PAGE: (86 . 0.03333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+       (define (gcd a b)
+	 (if (= b 0)
+	     a
+	     (gcd b (remainder a b))))
+
+       (define (numer x) (car x))
+       (define (denom x) (cdr x))
+
+       (define (print-rat x)
+	 (newline)
+	 (display (numer x))
+	 (display "/")
+	 (display (denom x)))
+
+
+       (define (make-rat-base n d)
+	 (let ((g (gcd n d)))
+	   (cons (/ n g) (/ d g))))
+
+       (define (make-rat n d) 
+	 (if (< d 0) (make-rat-base (- n) (- d)) (make-rat-base n d)))
+
+       (print-rat (make-rat 4 -8))
+     #+END_SRC
+
+**** DONE Exercise 2.2
+     :PROPERTIES:
+     :NOTER_PAGE: (87 . 0.5666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+       (define (print-point p)
+	 (newline)
+	 (display "(")
+	 (display (x-point p))
+	 (display ",")
+	 (display (y-point p))
+	 (display ")"))
+
+
+       (define (make-point x y)
+	 (cons x y))
+       (define (x-point point)
+	 (car point))
+       (define (y-point point)
+	 (cdr point))
+
+       (define (make-segment start-point end-point)
+	 (cons start-point end-point))
+       (define (start-point segment)
+	 (car segment))
+       (define (end-point segment)
+	 (cdr segment))
+
+       (define (mid-point-segment segment)
+	 (let ((x-avg (/ (+ (x-point (start-point segment)) (x-point (end-point segment))) 2))
+	       (y-avg (/ (+ (y-point (start-point segment)) (y-point (end-point segment))) 2)))
+	   (make-point x-avg y-avg)))
+
+       (print-point (mid-point-segment (make-segment (make-point 1 0) (make-point 0 1))))
+     #+END_SRC
+
+     #+RESULTS:
+     : 
+     : (1/2,1/2)
+
+**** DONE Exercise 2.3
+     :PROPERTIES:
+     :NOTER_PAGE: (88 . 0.016666666666666666)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+					       ; Utility Functions
+
+       (define (print-point p)
+	 (display "(")
+	 (display (x-point p))
+	 (display ",")
+	 (display (y-point p))
+	 (display ")"))
+
+
+       (define (make-point x y)
+	 (cons x y))
+       (define (x-point point)
+	 (car point))
+       (define (y-point point)
+	 (cdr point))
+
+       (define (make-segment start-point end-point)
+	 (cons start-point end-point))
+       (define (start-point segment)
+	 (car segment))
+       (define (end-point segment)
+	 (cdr segment))
+
+       (define (mid-point-segment segment)
+	 (let ((x-avg (/ (+ (x-point (start-point segment)) (x-point (end-point segment))) 2))
+	       (y-avg (/ (+ (y-point (start-point segment)) (y-point (end-point segment))) 2)))
+	   (make-point x-avg y-avg)))
+
+       (define (average x y) 
+	 (/ (+ x y) 2)) 
+
+       (define (square x) (* x x))
+
+       (define (improve guess x) 
+	 (average guess (/ x guess))) 
+
+       (define (good-enough? guess x) 
+	 (> 0.00001 (abs (- (improve guess x) guess))))
+
+       (define (sqrt-iter guess x) 
+	 (if (good-enough? guess x) 
+	     guess 
+	     (sqrt-iter (improve guess x) 
+			x)))
+
+       (define (sqrt x) 
+	 (sqrt-iter 1 x)) 
+
+       (define (length a b)
+	 (let ((xp (abs (- (x-point a) (x-point b))))
+	       (yp (abs (- (y-point a) (y-point b)))))
+	   (sqrt (+ (square xp) (square yp)))))
+
+					       ; --- New code ---
+
+       (define (make-rectangle tl tr bl br)
+	 (cons (cons tl tr) (cons bl br)))
+       (define (top-points rectangle) (car rectangle))
+       (define (top-left-point rectangle)
+	 (car (top-points rectangle)))
+       (define (top-right-point rectangle)
+	 (cdr (top-points rectangle)))
+       (define (bottom-points rectangle) (cdr rectangle))
+       (define (bottom-left-point rectangle)
+	 (car (bottom-points rectangle)))
+       (define (bottom-right-point rectangle)
+	 (cdr (bottom-points rectangle)))
+
+       (define (perimeter rectangle)
+	 (+ (length (top-left-point rectangle) (top-right-point rectangle))
+	    (length (top-right-point rectangle) (bottom-right-point rectangle))
+	    (length (bottom-right-point rectangle) (bottom-left-point rectangle))
+	    (length (bottom-left-point rectangle) (top-left-point rectangle))))
+       (define (area rectangle)
+	 (* (length (top-left-point rectangle) (top-right-point rectangle))
+	    (length (bottom-left-point rectangle) (bottom-right-point rectangle))))
+
+					       ; --- Test ---
+
+       (define (print-rectangle rectangle)
+	 (print-point (top-left-point rectangle))
+	 (display "------")
+	 (print-point (top-right-point rectangle))
+	 (newline)
+	 (display "|              |")
+	 (newline)
+	 (print-point (bottom-left-point rectangle))
+	 (display "------")
+	 (print-point (bottom-right-point rectangle))
+	 (newline)
+	 (newline)
+	 (display "perimeter: ")(display (exact->inexact (perimeter rectangle)))
+	 (newline)
+	 (display "area: ")(display (exact->inexact (area rectangle))))
+
+	 (define p1 (make-point 0 2))
+	 (define p2 (make-point 2 2))
+	 (define p3 (make-point 0 0))
+	 (define p4 (make-point 2 0))
+	 (define rectangle1 (make-rectangle p1 p2 p3 p4))
+	 (print-rectangle rectangle1)
+
+     #+END_SRC
+
