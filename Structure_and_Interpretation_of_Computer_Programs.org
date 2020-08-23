@@ -1654,3 +1654,377 @@
 
      #+END_SRC
 
+**** DONE Exercise 2.4
+     :PROPERTIES:
+     :NOTER_PAGE: (89 . 0.5166666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+       (define (cons x y)
+	 (lambda (m) (m x y)))
+       (define (car z)
+	 (z (lambda (p q) p)))
+       (define (cdr z)
+	 (z (lambda (p q) q)))
+
+       (define p (cons 1 2)) 
+       (display "p(x) = 1 = ")
+       (display (car p)) 
+       (newline)
+       (display "p(y) = 2 = ")
+       (display (cdr p))     
+     #+END_SRC
+
+The cons function returns a lamda that takes in as its only argument a function that gets accepts the values of x and y
+in that order. Now the car and cdr function simply receive both x and y and immediately return the appropriate one.
+
+**** DONE Exercise 2.5
+     :PROPERTIES:
+     :NOTER_PAGE: (89 . 0.7333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+       (define (exp base n)
+	 (define (exp_iter base n acc)
+	   (if (= n 0) acc (exp_iter base (- n 1) (* acc base))))
+	 (exp_iter base n 1))
+
+       (define (count-powers num base)
+	 (define (count-powers-iter num base count)
+	   (define temp (/ num base))
+	   (if (= (floor temp) temp)
+	       (count-powers-iter temp base (+ count 1))
+	       count))
+	 (count-powers-iter num base 0))
+
+       (define (cons a b)
+	 (* (exp 2 a) (exp 3 b)))
+
+       (define (car p)
+	 (count-powers p 2))
+
+       (define (cdr p)
+	 (count-powers p 3))
+
+       (display "pair = (5 3)")
+       (newline)
+       (define pair (cons 5 3))
+       (display "pair(x) = ") (display (car pair))
+       (newline)
+       (display "pair(y) = ") (display (cdr pair))
+
+     #+END_SRC
+
+     #+RESULTS:
+     : pair = (5 3)
+     : pair(x) = 5
+     : pair(y) = 3
+
+**** DONE Exercise 2.6
+     :PROPERTIES:
+     :NOTER_PAGE: (89 . 0.8)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+       (define zero (lambda (f) (lambda (x) x)))
+       (define (add-1 n)
+	 (lambda (f) (lambda (x) (f ((n f) x)))))
+
+
+					       ; define one
+       (define one (lambda (f) (lambda (x) (f x))))
+					       ; define two
+       (define two (lambda (f) (lambda (x) (f (f x)))))
+					       ; define + 
+       (define (add a b) 
+	 (lambda (f) 
+	   (lambda (x) 
+	     ((a f) ((b f) x))))) 
+
+
+       (define (to_decimal f)
+	 ((f (lambda (x) (+ 1 x))) 0))
+
+       (display "church_numeral 0 =")(display (to_decimal zero)) (newline)
+       (display "church_numeral 1 =")(display (to_decimal one)) (newline)
+       (display "church_numeral 2 =")(display (to_decimal two)) (newline)
+     #+END_SRC
+
+**** DONE Exercise 2.7
+     :PROPERTIES:
+     :NOTER_PAGE: (91 . 0.4)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+					       ; Interval Arithmetic Operations
+       (define (add-interval x y)
+	 (make-interval (+ (lower-bound x) (lower-bound y))
+			(+ (upper-bound x) (upper-bound y))))
+
+       (define (mul-interval x y)
+	 (let ((p1 (* (lower-bound x) (lower-bound y)))
+	       (p2 (* (lower-bound x) (upper-bound y)))
+	       (p3 (* (upper-bound x) (lower-bound y)))
+	       (p4 (* (upper-bound x) (upper-bound y))))
+	   (make-interval (min p1 p2 p3 p4)
+			  (max p1 p2 p3 p4))))
+
+       (define (div-interval x y)
+	 (mul-interval x
+		       (make-interval (/ 1.0 (upper-bound y))
+				      (/ 1.0 (lower-bound y)))))
+					       ; Constructor
+       (define (make-interval a b) (cons a b))
+
+					       ; Selectors
+       (define (upper-bound interval) (max (car interval) (cdr interval)))
+       (define (lower-bound interval) (min (car interval) (cdr interval)))
+
+       (define i_v1 (make-interval 1 5))
+       (define i_v2 (make-interval 5 1))
+
+
+       (display "i_v1 upper-bound = ")(display (upper-bound i_v1))(newline)
+       (display "i_v2 upper-bound = ")(display (upper-bound i_v2))(newline)
+       (display "i_v1 lower-bound = ")(display (lower-bound i_v1))(newline)
+       (display "i_v2 lower-bound = ")(display (lower-bound i_v2))(newline)
+     #+END_SRC
+
+**** DONE Exercise 2.8
+     :PROPERTIES:
+     :NOTER_PAGE: (91 . 0.5333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+					       ; Interval Arithmetic Operations
+       (define (add-interval x y)
+	 (make-interval (+ (lower-bound x) (lower-bound y))
+			(+ (upper-bound x) (upper-bound y))))
+
+       (define (mul-interval x y)
+	 (let ((p1 (* (lower-bound x) (lower-bound y)))
+	       (p2 (* (lower-bound x) (upper-bound y)))
+	       (p3 (* (upper-bound x) (lower-bound y)))
+	       (p4 (* (upper-bound x) (upper-bound y))))
+	   (make-interval (min p1 p2 p3 p4)
+			  (max p1 p2 p3 p4))))
+
+       (define (div-interval x y)
+	 (mul-interval x
+		       (make-interval (/ 1.0 (upper-bound y))
+				      (/ 1.0 (lower-bound y)))))
+					       ; Constructor
+       (define (make-interval a b) (cons a b))
+
+					       ; Selectors
+       (define (upper-bound interval) (max (car interval) (cdr interval)))
+       (define (lower-bound interval) (min (car interval) (cdr interval)))
+
+       (define i_v1 (make-interval 1 5))
+       (define i_v2 (make-interval 5 1))
+
+					       ; Substraction
+       (define (sub-interval i1 i2)
+	 (add-interval i1
+		       (make-interval (- (upper-bound i2))
+				      (- (lower-bound i2)))))
+
+       (define sub_interval (sub-interval i_v1 i_v2))
+
+       (display "upper-bound i_v1 - i_v2 = ")(display (upper-bound sub_interval))(newline)
+       (display "lower-bound i_v1 - i_v2 = ")(display (lower-bound sub_interval))(newline)
+     #+END_SRC
+
+**** DONE Exercise 2.9
+     :PROPERTIES:
+     :NOTER_PAGE: (91 . 0.6)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+					       ; Interval Arithmetic Operations
+       (define (add-interval x y)
+	 (make-interval (+ (lower-bound x) (lower-bound y))
+			(+ (upper-bound x) (upper-bound y))))
+
+       (define (mul-interval x y)
+	 (let ((p1 (* (lower-bound x) (lower-bound y)))
+	       (p2 (* (lower-bound x) (upper-bound y)))
+	       (p3 (* (upper-bound x) (lower-bound y)))
+	       (p4 (* (upper-bound x) (upper-bound y))))
+	   (make-interval (min p1 p2 p3 p4)
+			  (max p1 p2 p3 p4))))
+
+       (define (div-interval x y)
+	 (mul-interval x
+		       (make-interval (/ 1.0 (upper-bound y))
+				      (/ 1.0 (lower-bound y)))))
+					       ; Constructor
+       (define (make-interval a b) (cons a b))
+
+					       ; Selectors
+       (define (upper-bound interval) (max (car interval) (cdr interval)))
+       (define (lower-bound interval) (min (car interval) (cdr interval)))
+
+					       ; Substraction
+       (define (sub-interval i1 i2)
+	 (add-interval i1
+		       (make-interval (- (upper-bound i2))
+				      (- (lower-bound i2)))))
+					       ; Display
+       (define (display_width interval)
+	 (display (/ (- (upper-bound interval)
+			(lower-bound interval)) 2)))
+       (define (display_interval interval)
+	 (display "[")
+	 (display (lower-bound interval))
+	 (display ", ")
+	 (display (upper-bound interval))(display "]"))
+
+					       ; Show differnce of sum or difference is a function only of the width of the intervals
+					       ; Show that is not the case for multiplication and division
+
+       (define i_v1 (make-interval 1 5))
+       (define i_v2 (make-interval 5 1))
+       (define i_v3 (make-interval 4 8))
+       (define i_v4 (make-interval -6 -2))
+       (define sum_interval_1 (add-interval i_v1 i_v2))
+       (define diff_interval_1 (sub-interval i_v1 i_v2))
+       (define mul_interval_1 (mul-interval i_v1 i_v2))
+       (define div_interval_1 (div-interval i_v1 i_v2))
+       (define sum_interval_2 (add-interval i_v3 i_v4))
+       (define diff_interval_2 (sub-interval i_v3 i_v4))
+       (define mul_interval_2 (mul-interval i_v3 i_v4))
+       (define div_interval_2 (div-interval i_v3 i_v4))
+
+       (display "sum1_width = ")(display_width sum_interval_1)(newline)
+       (display "sum2_width = ")(display_width sum_interval_2)(newline)
+
+       (display "diff1_width = ")(display_width diff_interval_1)(newline)
+       (display "diff2_width = ")(display_width diff_interval_2)(newline)
+
+       (display "mul1_width = ")(display_width mul_interval_1)(newline)
+       (display "mul2_width = ")(display_width mul_interval_2)(newline)
+
+       (display "div1_width = ")(display_width div_interval_1)(newline)
+       (display "div2_width = ")(display_width div_interval_2)(newline)
+     #+END_SRC
+
+     #+RESULTS:
+     : sum1_width = 4
+     : sum2_width = 4
+     : diff1_width = 4
+     : diff2_width = 4
+     : mul1_width = 12
+     : mul2_width = 20
+     : div1_width = 2.4
+     : div2_width = 1.6666666666666667
+
+     We used two pairs of intervals with equal widths to test the claim and as we can see
+     the resulting values for the sum and difference for these intervals is the same
+     while the result for the multiplation and divition is not.
+
+**** DONE Exercise 2.10
+     :PROPERTIES:
+     :NOTER_PAGE: (91 . 0.75)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+					       ; Interval Arithmetic Operations
+       (define (add-interval x y)
+	 (make-interval (+ (lower-bound x) (lower-bound y))
+			(+ (upper-bound x) (upper-bound y))))
+
+       (define (mul-interval x y)
+	 (let ((p1 (* (lower-bound x) (lower-bound y)))
+	       (p2 (* (lower-bound x) (upper-bound y)))
+	       (p3 (* (upper-bound x) (lower-bound y)))
+	       (p4 (* (upper-bound x) (upper-bound y))))
+	   (make-interval (min p1 p2 p3 p4)
+			  (max p1 p2 p3 p4))))
+
+       (define (div-interval x y)
+	 (mul-interval x
+		       (make-interval (/ 1.0 (upper-bound y))
+				      (/ 1.0 (lower-bound y)))))
+					       ; Constructor
+       (define (make-interval a b) (cons a b))
+
+					       ; Selectors
+       (define (upper-bound interval) (max (car interval) (cdr interval)))
+       (define (lower-bound interval) (min (car interval) (cdr interval)))
+
+					       ; Substraction
+       (define (sub-interval i1 i2)
+	 (add-interval i1
+		       (make-interval (- (upper-bound i2))
+				      (- (lower-bound i2)))))
+					       ; Width
+       (define (width-interval interval)
+	 (/ (- (upper-bound interval)
+	       (lower-bound interval)) 2))
+
+
+       (define (div-interval-safe x y)
+	 (if (>= 0 (* (upper-bound y) (lower-bound y)))
+	     (error "Division by an interval that spans zero is meaningless.")
+	     (div-interval x y)))
+
+       (define i_v1 (make-interval 1 5))	
+       (define i_v2 (make-interval -2 1))
+
+       (display (div-interval-safe i_v1 i_v1))(newline)
+       (display (div-interval-safe i_v1 i_v2))(newline)
+     #+END_SRC
+
+     #+RESULTS:
+     : (0.2 . 5.0)
+     : Division by an interval that spans zero is meaningless.
+     : 
+
+**** TODO Exercise 2.11
+     :PROPERTIES:
+     :NOTER_PAGE: (91 . 0.8166666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+					       ; Interval Arithmetic Operations
+       (define (add-interval x y)
+	 (make-interval (+ (lower-bound x) (lower-bound y))
+			(+ (upper-bound x) (upper-bound y))))
+
+       (define (mul-interval x y)
+	 (let ((p1 (* (lower-bound x) (lower-bound y)))
+	       (p2 (* (lower-bound x) (upper-bound y)))
+	       (p3 (* (upper-bound x) (lower-bound y)))
+	       (p4 (* (upper-bound x) (upper-bound y))))
+	   (make-interval (min p1 p2 p3 p4)
+			  (max p1 p2 p3 p4))))
+
+       (define (div-interval-inner x y)
+	 (mul-interval x
+		       (make-interval (/ 1.0 (upper-bound y))
+				      (/ 1.0 (lower-bound y)))))
+
+       (define (div-interval x y)
+	 (if (>= 0 (* (upper-bound y) (lower-bound y)))
+	     (error "Division by an interval that spans zero is meaningless.")
+	     (div-interval-inner x y)))
+					       ; Constructor
+       (define (make-interval a b) (cons a b))
+
+					       ; Selectors
+       (define (upper-bound interval) (max (car interval) (cdr interval)))
+       (define (lower-bound interval) (min (car interval) (cdr interval)))
+
+					       ; Substraction
+       (define (sub-interval i1 i2)
+	 (add-interval i1
+		       (make-interval (- (upper-bound i2))
+				      (- (lower-bound i2)))))
+					       ; Width
+       (define (width-interval interval)
+	 (/ (- (upper-bound interval)
+	       (lower-bound interval)) 2))
+					       ; Multiplication implementation that tests for signs of endpoints
+
+     #+END_SRC
