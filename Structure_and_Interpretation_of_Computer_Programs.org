@@ -2027,4 +2027,152 @@ in that order. Now the car and cdr function simply receive both x and y and imme
 	       (lower-bound interval)) 2))
 					       ; Multiplication implementation that tests for signs of endpoints
 
+       (define (mul-interval x y)
+	 (let ((p1 (* (lower-bound x) (lower-bound y)))
+	       (p2 (* (lower-bound x) (upper-bound y)))
+	       (p3 (* (upper-bound x) (lower-bound y)))
+	       (p4 (* (upper-bound x) (upper-bound y))))
+	   (make-interval (min p1 p2 p3 p4)
+			  (max p1 p2 p3 p4))))
+
      #+END_SRC
+
+**** TODO Exercise 2.12
+     :PROPERTIES:
+     :NOTER_PAGE: (92 . 0.35)
+     :END:
+
+**** TODO Exercise 2.13
+     :PROPERTIES:
+     :NOTER_PAGE: (92 . 0.45)
+     :END:
+
+**** TODO Exercise 2.14
+     :PROPERTIES:
+     :NOTER_PAGE: (93 . 0.15)
+     :END:
+
+**** TODO Exercise 2.15
+     :PROPERTIES:
+     :NOTER_PAGE: (93 . 0.26666666666666666)
+     :END:
+
+**** TODO Exercise 2.16
+     :PROPERTIES:
+     :NOTER_PAGE: (93 . 0.36666666666666664)
+     :END:
+
+
+*** 2.2 Hierarchical Data and the Closure Property
+    :PROPERTIES:
+    :NOTER_PAGE: (94 . 0.25)
+    :END:
+
+**** DONE Exercise 2.17
+     :PROPERTIES:
+     :NOTER_PAGE: (98 . 0.11666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+       (define (last-pair element)
+	 (if (null? (cdr element))
+	     element
+	     (last-pair (cdr element))))
+       (display "last pair is: ")(display (last-pair (list 23 72 149 34)))
+     #+END_SRC
+
+**** DONE Exercise 2.18
+     :PROPERTIES:
+     :NOTER_PAGE: (98 . 0.21666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+       (define (reverse l)
+	 (define (reverse-iter lst r-l)
+	   (let ((a (car lst))
+		 (b (cdr lst)))
+	     (if (null? b) (cons a r-l) (reverse-iter b (cons a r-l)))))
+	 (reverse-iter l null))
+
+       (display "list= ")(display (list 1 4 9 16 25))(newline)
+       (display "reverse list= ")(display (reverse (list 1 4 9 16 25)))
+     #+END_SRC
+
+**** DONE Exercise 2.19
+     :PROPERTIES:
+     :NOTER_PAGE: (98 . 0.3333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+					       ; Utility Procedures
+       (define (first-denomination l)
+	 (car l))
+       (define (except-first-denomination l)
+	 (cdr l))
+       (define (no-more? l) (null? l))
+
+					       ; Count Change
+       (define (cc amount coin-values)
+	 (cond ((= amount 0) 1)
+	       ((or (< amount 0) (no-more? coin-values)) 0)
+	       (else
+		(+ (cc amount
+		       (except-first-denomination coin-values))
+		   (cc (- amount
+			  (first-denomination coin-values))
+		       coin-values)))))
+
+					       ; Test
+       (define us-coins (list 50 25 10 5 1))
+       (define us-coins-reversed (list 1 5 10 25 50))
+       (display "cc 100 using us-coins = 292 = ")(display (cc 100 us-coins))(newline)
+       (display "cc 100 using us-coins-reversed = 292 = ")(display (cc 100 us-coins))
+     #+END_SRC
+
+     Changing the order of the coins will only chage where in the call-tree the procedures
+     for specific amount/coins combination get called. The result of of cc is the sum of
+     the result of all these procedure calls so changing where they happen in the tree doesn't
+     do anything to change the result.
+
+**** DONE Exercise 2.20
+     :PROPERTIES:
+     :NOTER_PAGE: (99 . 0.1)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+					       ; I added the leading and trailing '*' to prevent babel
+					       ; from interpreting the result as a list.
+       (define (display-list l)
+	 (define (display-elements-iter l)
+	   (define (display-element ele last)
+	     (display ele)
+	     (if last (display "") (display ", ")))
+	   (if (not(null? l))
+	       ((lambda (a b)
+		  (display-element a (null? b))
+		  (display-elements-iter b)) (car l) (cdr l))
+	       null)) 
+	 (display "*(")
+	 (display-elements-iter l)
+	 (display ")*"))
+       (define (even? a) (= 0 (remainder a 2)))
+       (define (odd? a) (not(even? a)))
+
+       (define (filter2 sl predicate)
+	 (if (null? sl)
+	     null
+	     (if (predicate (car sl))
+		 (cons (car sl) (filter2 (cdr sl) predicate))
+		 (filter2 (cdr sl) predicate))))
+
+       (define (same-parity . l)
+	 (if (even? (car l)) (filter2 l even?) (filter2 l odd?)))
+
+       (display "(1 3 5 7) = ")(display-list (same-parity 1 2 3 4 5 6 7))(newline)
+       (display "(2 4 6) = ") (display-list (same-parity 2 3 4 5 6 7))
+     #+END_SRC
+
+     #+RESULTS:
+     : (1 3 5 7) = *(1, 3, 5, 7)*
+     : (2 4 6) = *(2, 4, 6)*
+
