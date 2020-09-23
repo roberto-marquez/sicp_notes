@@ -2482,3 +2482,602 @@ in that order. Now the car and cdr function simply receive both x and y and imme
      2   -> (() (3)) | ((2) (2 3)) = (() (2) (3) (2 3))
      1   -> (() (2) (3) (2 3)) | ((1) (1 2) (1 3) (1 2 3)) = (() (1) (2) (3) (1 2) (2 3) (1 3) (1 2 3))
 
+**** DONE Exercise 2.33
+     :PROPERTIES:
+     :NOTER_PAGE: (111 . 0.4)
+     :END:
+
+     #+BEGIN_SRC scheme :results output     
+(define (accumulate op initial sequence)
+(if (null? sequence)
+initial
+(op (car sequence)
+(accumulate op initial (cdr sequence)))))
+
+(define (map p sequence)
+(accumulate (lambda (x y) (cons (p x) y)) null sequence))
+(define (append seq1 seq2)
+(accumulate cons seq2  seq1))
+(define (length sequence)
+(accumulate (lambda (x y) (+ 1 y)) 0 sequence))
+
+(display "map(x^2, (1,2,3,4)) = ") (display (map (lambda (x) (* x x)) (list 1 2 3 4)))(newline)
+(display "append((1,2), (3,4,5)) = ")(display (append (list 1 2) (list 3 4 5)))(newline)
+(display "length((3,4,5)) = ")(display (length (list 3 4 5)))(newline)
+     #+END_SRC
+
+**** TODO Exercise 2.34
+     :PROPERTIES:
+     :NOTER_PAGE: (111 . 0.5833333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.35
+     :PROPERTIES:
+     :NOTER_PAGE: (112 . 0.1)
+     :END:
+     
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.36
+     :PROPERTIES:
+     :NOTER_PAGE: (112 . 0.18333333333333332)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.37
+     :PROPERTIES:
+     :NOTER_PAGE: (112 . 0.43333333333333335)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.38
+     :PROPERTIES:
+     :NOTER_PAGE: (113 . 0.16666666666666666)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.39
+     :PROPERTIES:
+     :NOTER_PAGE: (113 . 0.5833333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.40
+     :PROPERTIES:
+     :NOTER_PAGE: (115 . 0.5166666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.41
+     :PROPERTIES:
+     :NOTER_PAGE: (115 . 0.5833333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.42
+     :PROPERTIES:
+     :NOTER_PAGE: (115 . 0.65)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.43
+     :PROPERTIES:
+     :NOTER_PAGE: (117 . 0.25)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.44
+     :PROPERTIES:
+     :NOTER_PAGE: (122 . 0.48333333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.45
+     :PROPERTIES:
+     :NOTER_PAGE: (123 . 0.26666666666666666)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.46
+     :PROPERTIES:
+     :NOTER_PAGE: (124 . 0.6333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.47
+     :PROPERTIES:
+     :NOTER_PAGE: (124 . 0.8333333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.48
+     :PROPERTIES:
+     :NOTER_PAGE: (125 . 0.6833333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.49
+     :PROPERTIES:
+     :NOTER_PAGE: (125 . 0.7833333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.50
+     :PROPERTIES:
+     :NOTER_PAGE: (127 . 0.7666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.51
+     :PROPERTIES:
+     :NOTER_PAGE: (127 . 0.8333333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.52
+     :PROPERTIES:
+     :NOTER_PAGE: (128 . 0.7833333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.53
+     :PROPERTIES:
+     :NOTER_PAGE: (134 . 0.25)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.54
+     :PROPERTIES:
+     :NOTER_PAGE: (134 . 0.5)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.55
+     :PROPERTIES:
+     :NOTER_PAGE: (134 . 0.75)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.56
+     :PROPERTIES:
+     :NOTER_PAGE: (139 . 0.016666666666666666)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.57
+     :PROPERTIES:
+     :NOTER_PAGE: (139 . 0.23333333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.58
+     :PROPERTIES:
+     :NOTER_PAGE: (139 . 0.38333333333333336)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.59
+     :PROPERTIES:
+     :NOTER_PAGE: (141 . 0.08333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.60
+     :PROPERTIES:
+     :NOTER_PAGE: (141 . 0.11666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.61
+     :PROPERTIES:
+     :NOTER_PAGE: (142 . 0.4666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.62
+     :PROPERTIES:
+     :NOTER_PAGE: (142 . 0.55)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.63
+     :PROPERTIES:
+     :NOTER_PAGE: (144 . 0.8666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.64
+     :PROPERTIES:
+     :NOTER_PAGE: (145 . 0.43333333333333335)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.65
+     :PROPERTIES:
+     :NOTER_PAGE: (146 . 0.08333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.66
+     :PROPERTIES:
+     :NOTER_PAGE: (146 . 0.85)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.67
+     :PROPERTIES:
+     :NOTER_PAGE: (152 . 0.03333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.68
+     :PROPERTIES:
+     :NOTER_PAGE: (152 . 0.26666666666666666)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.69
+     :PROPERTIES:
+     :NOTER_PAGE: (152 . 0.5333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.70
+     :PROPERTIES:
+     :NOTER_PAGE: (152 . 0.8)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.71
+     :PROPERTIES:
+     :NOTER_PAGE: (153 . 0.43333333333333335)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.72
+     :PROPERTIES:
+     :NOTER_PAGE: (153 . 0.5166666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.73
+     :PROPERTIES:
+     :NOTER_PAGE: (166 . 0.23333333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.74
+     :PROPERTIES:
+     :NOTER_PAGE: (167 . 0.21666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.75
+     :PROPERTIES:
+     :NOTER_PAGE: (168 . 0.75)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.76
+     :PROPERTIES:
+     :NOTER_PAGE: (168 . 0.8)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.77
+     :PROPERTIES:
+     :NOTER_PAGE: (173 . 0.6666666666666666)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.78
+     :PROPERTIES:
+     :NOTER_PAGE: (174 . 0.1)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.79
+     :PROPERTIES:
+     :NOTER_PAGE: (174 . 0.2833333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.80
+     :PROPERTIES:
+     :NOTER_PAGE: (174 . 0.35)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.81
+     :PROPERTIES:
+     :NOTER_PAGE: (178 . 0.7833333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.82
+     :PROPERTIES:
+     :NOTER_PAGE: (179 . 0.4666666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.83
+     :PROPERTIES:
+     :NOTER_PAGE: (179 . 0.6)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.84
+     :PROPERTIES:
+     :NOTER_PAGE: (179 . 0.7)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.85
+     :PROPERTIES:
+     :NOTER_PAGE: (179 . 0.8)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.86
+     :PROPERTIES:
+     :NOTER_PAGE: (180 . 0.18333333333333332)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.87
+     :PROPERTIES:
+     :NOTER_PAGE: (185 . 0.4166666666666667)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.88
+     :PROPERTIES:
+     :NOTER_PAGE: (185 . 0.48333333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.89
+     :PROPERTIES:
+     :NOTER_PAGE: (185 . 0.5333333333333333)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.90
+     :PROPERTIES:
+     :NOTER_PAGE: (185 . 0.5833333333333334)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.91
+     :PROPERTIES:
+     :NOTER_PAGE: (185 . 0.7)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.92
+     :PROPERTIES:
+     :NOTER_PAGE: (187 . 0.25)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.93
+     :PROPERTIES:
+     :NOTER_PAGE: (187 . 0.6666666666666666)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.94
+     :PROPERTIES:
+     :NOTER_PAGE: (188 . 0.38333333333333336)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.95
+     :PROPERTIES:
+     :NOTER_PAGE: (188 . 0.6)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.96
+     :PROPERTIES:
+     :NOTER_PAGE: (189 . 0.2)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
+
+**** TODO Exercise 2.97
+     :PROPERTIES:
+     :NOTER_PAGE: (189 . 0.6666666666666666)
+     :END:
+
+     #+BEGIN_SRC scheme :results output
+     
+     #+END_SRC
